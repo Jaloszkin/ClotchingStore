@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Регистрация | Clothing Store{% endblock %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="col-md-6 shadow-lg p-5 rounded" style="background-color: #f8f9fa; border: 1px solid #eaeaea;">
+    <h2 class="mb-4 text-center" style="font-family: 'Kavoon', cursive; color: #8e7054;">Регистрация</h2>
+
+    {% if form.errors %}
+      <div class="alert alert-danger mb-4" style="font-family: 'Nunito', sans-serif;">
+        Пожалуйста, исправьте следующие ошибки:
+        <ul class="mb-0 mt-1">
+          {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+
+      <!-- Поле для имени пользователя -->
+      <div class="mb-3">
+        <label for="id_username" class="form-label" style="font-family: 'Nunito', sans-serif; font-weight: bold; color: #6e473b;">
+          Имя пользователя
+        </label>
+        <input type="text" name="username" id="id_username" class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+               value="{{ form.username.value|default:'' }}" required style="border-color: #8e7054;">
+        {% if form.username.errors %}
+          <div class="invalid-feedback" style="font-family: 'Nunito', sans-serif;">
+            {{ form.username.errors|join:", " }}
+          </div>
+        {% endif %}
+        <small class="text-muted" style="font-family: 'Nunito', sans-serif;">
+          Только буквы, цифры и @/./+/-/_.
+        </small>
+      </div>
+
+      <!-- Поле для email -->
+      <div class="mb-3">
+        <label for="id_email" class="form-label" style="font-family: 'Nunito', sans-serif; font-weight: bold; color: #6e473b;">
+          Email адрес
+        </label>
+        <input type="email" name="email" id="id_email" class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+               value="{{ form.email.value|default:'' }}" required style="border-color: #8e7054;">
+        {% if form.email.errors %}
+          <div class="invalid-feedback" style="font-family: 'Nunito', sans-serif;">
+            {{ form.email.errors|join:", " }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Поле для пароля -->
+      <div class="mb-3">
+        <label for="id_password1" class="form-label" style="font-family: 'Nunito', sans-serif; font-weight: bold; color: #6e473b;">
+          Пароль
+        </label>
+        <input type="password" name="password1" id="id_password1" class="form-control {% if form.password1.errors %}is-invalid{% endif %}"
+               required style="border-color: #8e7054;">
+        {% if form.password1.errors %}
+          <div class="invalid-feedback" style="font-family: 'Nunito', sans-serif;">
+            {{ form.password1.errors|join:", " }}
+          </div>
+        {% endif %}
+        <div class="form-text" style="font-family: 'Nunito', sans-serif;">
+          <ul class="ps-3 mb-0">
+            <li>Пароль должен содержать не менее 8 символов</li>
+            <li>Не должен быть слишком простым</li>
+            <li>Не должен состоять только из цифр</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Поле для подтверждения пароля -->
+      <div class="mb-4">
+        <label for="id_password2" class="form-label" style="font-family: 'Nunito', sans-serif; font-weight: bold; color: #6e473b;">
+          Подтверждение пароля
+        </label>
+        <input type="password" name="password2" id="id_password2" class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
+               required style="border-color: #8e7054;">
+        {% if form.password2.errors %}
+          <div class="invalid-feedback" style="font-family: 'Nunito', sans-serif;">
+            {{ form.password2.errors|join:", " }}
+          </div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn w-100 mt-3" style="background-color: #8e7054; color: white; font-family: 'Nunito', sans-serif; font-weight: bold; height: 3rem; transition: 0.3s ease;">
+        Создать аккаунт
+      </button>
+      <button type="button" class="btn w-100 mt-3" style="background-color: white; color: #8e7054; border: 2px solid #8e7054; font-family: 'Nunito', sans-serif; font-weight: bold; height: 3rem; transition: 0.3s ease;" onclick="window.location.href='{% url 'login' %}'">
+        Уже есть аккаунт? Войти
+      </button>
+    </form>
+  </div>
+</div>
+
+<style>
+  .form-control {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    font-family: 'Nunito', sans-serif;
+    transition: border-color 0.3s ease;
+  }
+  .form-control:focus {
+    border-color: #8e7054;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(142, 112, 84, 0.25);
+  }
+  .btn:hover {
+    background-color: #6e473b !important;
+    color: white !important;
+    border-color: #6e473b !important;
+  }
+  .alert ul {
+    margin-bottom: 0;
+  }
+</style>
+{% endblock %}

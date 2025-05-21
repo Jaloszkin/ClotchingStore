@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Заказ оформлен | Clothing Store{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5 text-center">
+  <h1 class="mb-4">Спасибо за заказ!</h1>
+  <p class="lead">Мы отправим вам подтверждение на указанную почту.</p>
+  <a href="{% url 'index' %}" class="btn btn-dark mt-3">На главную</a>
+</div>
+{% endblock %}

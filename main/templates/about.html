@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}О нас | Clothing Store{% endblock %}
+
+{% block content %}
+  {% load static %}
+
+<!-- ABOUT -->
+  <div>
+  <div class="abct">
+    <div class="container d-flex justify-content-center justify-items-center">
+      <img src="{% static 'main/img/hero232.jpg' %}" alt="" loading="lazy" />
+    </div>
+    <div class="container p-5 abct2">
+      <div class="row">
+        <div class="col-12 col-md">
+          <h1>Кто мы?</h1>
+          <p>
+            Наш магазин - бренд уличной одежды, сочетающий современный дизайн с местной культурой. Мы - команда креативщиков, нацеленных на создание свежих, стильных вещей, которые выделяются на общем фоне.
+          </p>
+        </div>
+        <div class="col-12 col-md">
+          <h1>Что мы делаем?</h1>
+          <p>
+            Мы разрабатываем и производим уличную одежду, которая сочетает в себе комфорт, моду и аутентичные тунисские мотивы. Наши коллекции созданы для тех, кто хочет выразить себя с помощью смелой, уникальной моды.
+          </p>
+        </div>
+        <div class="col-12 col-md">
+          <h1>Почему вы должны выбрать именно нас?</h1>
+          <p>
+            В нашем магазине мы ставим во главу угла качество и оригинальность. Наша уличная одежда изготавливается с вниманием к деталям, предлагая вам модную одежду, основанную на тунисском наследии.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <div class="p-5 srvttl">
+      <h1>Наш сервис</h1>
+      <p>
+        В нашем магазине мы специализируемся на изготовлении индивидуальной уличной одежды, в которой современная мода сочетается с тунисской культурой, <br />
+        мы предлагаем высококачественные, уникальные изделия, которые помогут вам выделиться.
+      </p>
+      <div class="row p-5 text-center">
+        <div class="col-12 col-md service">
+          <img src="{% static 'main/img/delivery.png' %}" alt="Доставка" />
+          <h4>Услуги по доставке</h4>
+        </div>
+        <div class="col-12 col-md service ms-md-4">
+          <img src="{% static 'main/img/return.png' %}" alt="Возврат" />
+          <h4>Доставка и возврат товара</h4>
+        </div>
+        <div class="col-12 col-md service ms-md-4">
+          <img src="{% static 'main/img/promotion.png' %}" alt="Цены" />
+          <h4>Низкие цены</h4>
+        </div>
+        <div class="col-12 col-md service ms-md-4">
+          <img src="{% static 'main/img/24hours.png' %}" alt="Служба поддержки" />
+          <h4>24-часовое обслуживание</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center abct3">
+    <h2>Следите за нашей продукцией</h2>
+    <p>
+      Оставайтесь на связи и вдохновляйтесь нашими последними новинками, образами в уличной одежде и закулисными моментами. <br />
+      Следите за нашими эксклюзивными обновлениями и советами по стилю!
+    </p>
+    <div class="row no-gutters">
+      {% for i in "123456" %}
+      <div class="col-6 col-md-2 p-0">
+        <div class="img-container c1">
+          <img src="{% static 'main/img/'|add:i|add:'.jpg' %}" class="img-fluid" alt="Instagram Photo {{ i }}" />
+          <div class="overlay">
+            <img src="{% static 'main/img/instagram2.png' %}" class="insta-icon" alt="Instagram Icon" />
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<!-- ABOUT -->
+
+{% endblock %}

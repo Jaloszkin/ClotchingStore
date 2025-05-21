@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}Каталог | Clothing Store{% endblock %}
+
+{% block content %}
+  {% load static %}
+
+  <!-- MAIN CONTENT -->
+  <div class="container-fluid bg-light pt-5 pb-5 cnt-hero-shop">
+    <div class="row">
+      <!-- SIDEBAR -->
+      <div class="col-12 col-md-3 sidebar-shop">
+        <form id="filterForm" method="GET" action="{% url 'catalog' %}">
+          <div class="d-flex custom-gap-shop">
+            <div class="filter-title ms-2">Фильтр</div>
+            <img src="{% static 'main/img/filter.png' %}" alt="filter Image" class="img-fluid" />
+          </div>
+          <hr class="custom-hr" />
+
+          <!-- Категории -->
+          <div class="ms-2">
+            <h1>Категории</h1>
+            {% for category in categories %}
+              <div class="d-flex justify-content-between align-items-center p-2 border rounded mb-2">
+                <label for="category_{{ category.id }}" class="mb-0">{{ category.name }}</label>
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="category_{{ category.id }}"
+                  value="{{ category.id }}"
+                  name="categories"
+                  {% if category.id|stringformat:"s" in selected_categories %}checked{% endif %}
+                />
+              </div>
+            {% endfor %}
+          </div>
+
+          <hr class="custom-hr" />
+
+          <!-- Цена -->
+          <div class="ms-2">
+            <h1>Цена</h1>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span id="priceMin">0 Руб</span>
+              <span id="priceMax">10000 Руб</span>
+            </div>
+            <input
+              type="range"
+              class="form-range"
+              id="priceRange"
+              min="0"
+              max="10000"
+              step="100"
+              value="{{ request.GET.price_range|default:'5000' }}"
+              name="price_range"
+            />
+          </div>
+
+          <hr class="custom-hr" />
+
+          <!-- Доступность -->
+          <div class="ms-2">
+            <h1>Доступность</h1>
+            <div class="d-flex gap-2 ms-2 mb-2">
+              <input class="form-check-input" type="radio" name="in_stock" id="all" value="all"
+                {% if not request.GET.in_stock or request.GET.in_stock == 'all' %}checked{% endif %}/>
+              <label for="all">Все</label>
+            </div>
+            <div class="d-flex gap-2 ms-2 mb-2">
+              <input class="form-check-input" type="radio" name="in_stock" id="instock" value="true"
+                {% if request.GET.in_stock == 'true' %}checked{% endif %}/>
+              <label for="instock">В наличии</label>
+            </div>
+            <div class="d-flex gap-2 ms-2 mb-2">
+              <input class="form-check-input" type="radio" name="in_stock" id="outofstock" value="false"
+                {% if request.GET.in_stock == 'false' %}checked{% endif %}/>
+              <label for="outofstock">Нет в наличии</label>
+            </div>
+          </div>
+
+          <hr class="custom-hr" />
+
+          <!-- Размеры -->
+          <div class="ms-2">
+            <h1>Размеры</h1>
+            <div class="btn-group" role="group" aria-label="Sizes">
+              {% for size in sizes %}
+                <input
+                  type="checkbox"
+                  class="btn-check custom-size-btn"
+                  id="size{{ size }}"
+                  value="{{ size }}"
+                  name="sizes"
+                  {% if size in selected_sizes %}checked{% endif %}
+                />
+                <label class="btn btn-outline-primary btn-sm custom-size-label" for="size{{ size }}">{{ size }}</label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Сортировка -->
+          <div class="ms-2 mt-4">
+            <label for="sortOptions" class="form-label me-2 mb-0">Сортировать по:</label>
+            <select class="form-select form-select-sm" id="sortOptions" name="sort" style="width: auto">
+              <option value="price-high-to-low" {% if request.GET.sort == 'price-high-to-low' %}selected{% endif %}>Высоким ценам</option>
+              <option value="price-low-to-high" {% if request.GET.sort == 'price-low-to-high' %}selected{% endif %}>Низким ценам</option>
+            </select>
+          </div>
+
+          <div class="mt-3 text-center">
+            <button type="submit" class="btn btn-dark">Применить фильтры</button>
+            <a href="{% url 'catalog' %}" class="btn btn-outline-secondary ms-2">Сбросить</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- CARDS SECTION -->
+      <div class="col-12 col-md-8">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="PS2-title">Продукты</div>
+        </div>
+
+        <!-- Карточки товаров -->
+        <div id="productContainer" class="row row-cols-1 row-cols-md-3 g-4">
+          {% if products %}
+            {% for product in products %}
+            <div class="col">
+              <div class="card card-home h-100">
+                <a href="{% url 'product_detail' product.pk %}">
+                  <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" />
+                </a>
+                <div class="card-body">
+                  <h5 class="card-title">{{ product.name }}</h5>
+                  <p class="card-text">{{ product.short_description|truncatechars:80 }}</p>
+                  <p class="card-text fw-bold">{{ product.price }} руб.</p>
+                  {% if product.in_stock %}
+                    <p class="text-success">В наличии</p>
+                  {% else %}
+                    <p class="text-danger">Нет в наличии</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-center">Товары не найдены. Попробуйте изменить параметры фильтрации.</p>
+          {% endif %}
+        </div>
+
+        <!-- Пагинация -->
+        <div id="pagination" class="pagination mt-4">
+          {% if is_paginated %}
+            <nav aria-label="Page navigation">
+              <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                {% endif %}
+
+                {% for num in paginator.page_range %}
+                  {% if num == page_obj.number %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                  {% else %}
+                    <li class="page-item">
+                      <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ num }}">{{ num }}</a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                {% endif %}
+              </ul>
+            </nav>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- MAIN CONTENT -->
+
+  <script>
+    // Обновление отображения цены при изменении ползунка
+    document.getElementById('priceRange').addEventListener('input', function() {
+      document.getElementById('priceMax').textContent = this.value + ' Руб';
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const priceRange = document.getElementById('priceRange');
+      const priceMax = document.getElementById('priceMax');
+      priceMax.textContent = priceRange.value + ' Руб';
+    });
+
+  </script>
+{% endblock %}

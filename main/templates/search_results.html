@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Результаты поиска | Clothing Store{% endblock %}
+
+{% block content %}
+<div class="container-fluid bg-light pt-5 pb-5">
+    <div class="row">
+        <!-- Основной контент (без сайдбара) -->
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Результаты поиска: "{{ search_text }}"</h2>
+            </div>
+
+            <!-- Карточки товаров -->
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% if products %}
+                    {% for product in products %}
+                    <div class="col">
+                        <div class="card card-home h-100">
+                            <a href="{% url 'product_detail' product.pk %}">
+                                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" />
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.short_description|truncatechars:80 }}</p>
+                                <p class="card-text fw-bold">{{ product.price }} руб.</p>
+                                {% if product.in_stock %}
+                                    <p class="text-success">В наличии</p>
+                                {% else %}
+                                    <p class="text-danger">Нет в наличии</p>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer bg-white border-0">
+                                <button class="btn btn-dark w-100 add-to-cart" data-product-id="{{ product.id }}">
+                                    В корзину
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info text-center">
+                            По запросу "{{ search_text }}" ничего не найдено.
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Пагинация (если нужно) -->
+            {% if is_paginated %}
+            <div class="pagination mt-4">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                        {% endif %}
+
+                        {% for num in paginator.page_range %}
+                            {% if num == page_obj.number %}
+                                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .card-home {
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .card-home:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .card-img-top {
+        height: 250px;
+        object-fit: contain;
+        padding: 15px;
+    }
+    .add-to-cart {
+        transition: all 0.3s ease;
+    }
+    .add-to-cart:hover {
+        background-color: #333;
+        color: #fff;
+    }
+</style>
+{% endblock %}

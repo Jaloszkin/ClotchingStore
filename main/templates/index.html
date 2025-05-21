@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Главная | Clothing Store{% endblock %}
+
+{% block content %}
+  {% load static %}
+  <div class="Hero-section" style="background-image: url('{% static 'main/img/hathhero.jpg' %}'); background-size: cover; background-repeat: no-repeat; background-position: center; height: 100vh; width: 100vw; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center;">
+    <h1 class="mb-3 mt-5">
+      Будьте в курсе последних тенденций с нашими новейшими <br />
+      Коллекциями!
+    </h1>
+    <p class="mb-5">
+      Познакомьтесь с нашей разнообразной коллекцией тщательно подобранной одежды, созданной для того, чтобы подчеркнуть <br />
+      свою индивидуальность и учесть ваше уникальное чувство стиля.
+    </p>
+    <a href="{% url 'catalog' %}">
+      <button class="px-5 py-2">К товарам</button>
+    </a>
+  </div>
+
+  <div class="container my-5">
+  <ul class="nav nav-tabs" id="productTabs" role="tablist" style="justify-content: center;">
+    <li class="nav-item" role="presentation">
+      <button style="font-family: 'Kavoon', cursive; color: #8e7054;" class="nav-link active" id="new-tab" data-bs-toggle="tab" data-bs-target="#new" type="button" role="tab">Новые поступления</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button style="font-family: 'Kavoon', cursive; color: #8e7054;" class="nav-link" id="sale-tab" data-bs-toggle="tab" data-bs-target="#sale" type="button" role="tab">Горячие продажи</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button style="font-family: 'Kavoon', cursive; color: #8e7054;" class="nav-link" id="best-tab" data-bs-toggle="tab" data-bs-target="#best" type="button" role="tab">Бестселлеры</button>
+    </li>
+  </ul>
+
+  <div class="tab-content bg-body-secondary p-4 border border-top-0" id="productTabContent">
+    <div class="tab-pane fade show active" id="new" role="tabpanel">
+      <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for product in new_products %}
+          {% include 'partials/product_card.html' %}
+        {% empty %}
+          <p class="text-muted">Нет новых товаров.</p>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="tab-pane fade" id="sale" role="tabpanel">
+      <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for product in hot_sales %}
+          {% include 'partials/product_card.html' %}
+        {% empty %}
+          <p class="text-muted">Нет товаров на распродаже.</p>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="tab-pane fade" id="best" role="tabpanel">
+      <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for product in bestsellers %}
+          {% include 'partials/product_card.html' %}
+        {% empty %}
+          <p class="text-muted">Нет бестселлеров.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+      <a href="{% url 'catalog' %}" class="d-flex justify-content-center" style="text-decoration: none">
+        <button class="filter-btn filters-btn-home text-center" data-type="best">
+          ЗАКУПИТЬСЯ СЕЙЧАС
+        </button>
+      </a>
+    </div>
+
+  <!-- BADGE SECTION -->
+    <div class="container-fluid p-5 my-5 bg-body-secondary">
+      <div class="row row-cols-1 row-cols-md-3 text-center fw-medium fs-5 tyu">
+        <div class="col col-md-4">
+          <img src="{% static 'main/img/refresh.png' %}" alt="" />
+          <p class="mt-4">Отправка и возврат товара в день обращения</p>
+        </div>
+        <div class="col col-md-4">
+          <img src="{% static 'main/img/secure.png' %}" alt="" />
+          <p class="mt-4">Безопасные платежи</p>
+        </div>
+        <div class="col col-md-4">
+          <img src="{% static 'main/img/service.png' %}" alt="" />
+          <p class="mt-4">Обслуживание клиентов</p>
+        </div>
+      </div>
+    </div>
+  <!-- BADGE SECTION -->
+
+  <!-- NEWSLETTER SIGNUP -->
+  <section class="newsletter mt-5">
+    <div class="container">
+      <h2>Будьте в курсе событий</h2>
+      <p>Подпишитесь на нашу рассылку новостей, чтобы быть в курсе последних обновлений и предложений.</p>
+      <form>
+        <input type="email" placeholder="Введите свою почту" required />
+        <button type="submit" class="buy-now-btn">Подписаться</button>
+      </form>
+    </div>
+  </section>
+
+{% endblock %}

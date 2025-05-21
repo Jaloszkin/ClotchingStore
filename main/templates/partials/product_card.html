@@ -1,0 +1,22 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+
+<div class="col">
+  <div class="card card-home">
+    <a href="{% url 'product_detail' product.id %}">
+      <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+    </a>
+    <div class="card-body">
+      <h5 class="card-title">{{ product.name }}</h5>
+      <p class="card-text">{{ product.short_description|truncatechars:80 }}</p>
+      <p class="card-text fw-bold">{{ product.price }} ₽</p>
+
+      {% if product.in_stock %}
+        <p class="text-success">В наличии</p>
+      {% else %}
+        <p class="text-danger">Нет в наличии</p>
+      {% endif %}
+
+    </div>
+  </div>
+</div>

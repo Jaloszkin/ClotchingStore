@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Профиль | Clothing Store{% endblock %}
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 p-5 shadow-lg rounded" style="background-color: #f8f9fa; border: 1px solid #eaeaea;">
+      <h2 class="mb-4 text-center" style="font-family: 'Kavoon', cursive; color: #8e7054;">Профиль пользователя</h2>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="p-4" style="background-color: white; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h4 style="font-family: 'Nunito', sans-serif; font-weight: bold; color: #6e473b;">Личная информация</h4>
+            <hr style="border-top: 2px solid #8e7054;">
+            <p style="font-family: 'Nunito', sans-serif;"><strong>Имя пользователя:</strong> {{ user.username }}</p>
+            <p style="font-family: 'Nunito', sans-serif;"><strong>Email:</strong> {{ user.email }}</p>
+            <p style="font-family: 'Nunito', sans-serif; display: flex; align-items: center; justify-content: space-between; max-width: 300px;">
+              <strong>Пароль:</strong>
+              <span>********</span>
+              <a href="{% url 'change_password' %}" style="margin-left: 10px; font-size: 0.9em; color: #007bff; text-decoration: none;">Сменить пароль</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="p-4" style="background-color: white; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); height: 100%;">
+            <h4 style="font-family: 'Nunito', sans-serif; font-weight: bold; color: #6e473b;">Действия</h4>
+            <hr style="border-top: 2px solid #8e7054;">
+            <div class="d-flex flex-column gap-3">
+              <a href="{% url 'index' %}" class="btn" style="background-color: #8e7054; color: white; font-family: 'Nunito', sans-serif; font-weight: bold; transition: 0.3s ease;">
+                На главную
+              </a>
+              {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="btn" style="background-color: white; color: #e53637; border: 2px solid #e53637; font-family: 'Nunito', sans-serif; font-weight: bold; transition: 0.3s ease;">
+                  Выйти
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .btn:hover {
+    background-color: #6e473b !important;
+    color: white !important;
+    border-color: #6e473b !important;
+  }
+  p strong {
+    color: #8e7054;
+  }
+</style>
+{% endblock %}
