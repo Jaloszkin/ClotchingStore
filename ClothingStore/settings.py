@@ -134,5 +134,5 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'clotchingstore.onrender.com',
+    'https://site-kz.onrender.com/',
 ]
