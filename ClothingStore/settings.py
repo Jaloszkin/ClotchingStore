@@ -134,3 +134,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = [
     'https://clotchingstore.onrender.com',
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://clotchingstore.onrender.com",
+]
+
+CORS_ALLOW_CREDENTIALS = True
