@@ -23,6 +23,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -31,6 +32,35 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
 ]
+
+JAZZMIN_SETTINGS = {
+    "theme": "light",
+    "welcome_sign": "Панель администратора",
+    "site_title": "Админка",
+    "site_header": "Панель управления",
+    "site_brand": "Clothing Store",
+
+    'site_colors': {
+        'primary': '#8e7054',    # основной цвет (кнопки, ссылки, активные элементы)
+        'secondary': '#6e473b',  # второстепенный/наведение
+        'success': '#4CAF50',    # зелёный для успешных операций
+        'info': '#8e7054',       # инфо-сообщения также в коричневом
+        'warning': '#e0a800',    # тёплый жёлтый для предупреждений
+        'danger': '#c0392b',     # красный для ошибок
+    },
+
+}
+
+# Настройки email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'  # Например, для Yandex
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ваш_email@yandex.ru'
+EMAIL_HOST_PASSWORD = 'ваш_пароль'
+DEFAULT_FROM_EMAIL = 'ваш_email@yandex.ru'
+CONTACT_EMAIL = 'email_для_получения_сообщений@example.com'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

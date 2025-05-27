@@ -1,0 +1,35 @@
+/* Кнопки */
+button,
+input[type="submit"],
+a.button {
+  background-color: #8e7054 !important;
+  border-color: #8e7054 !important;
+  color: #fff !important;
+}
+
+button:hover,
+input[type="submit"]:hover,
+a.button:hover {
+  background-color: #6e473b !important;
+  border-color: #6e473b !important;
+}
+
+/* Ссылки */
+a {
+  color: #8e7054 !important;
+}
+a:hover {
+  color: #6e473b !important;
+}
+
+/* Активное меню */
+.sidebar .current-model a,
+.sidebar a:hover {
+  background-color: #8e7054 !important;
+  color: #fff !important;
+}
+
+/* Заголовки */
+h1, h2, h3, .module caption {
+  color: #8e7054 !important;
+}

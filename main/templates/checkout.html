@@ -6,59 +6,174 @@
 <div class="container my-5">
   <div class="row">
     <!-- Форма оплаты -->
-    <div class="col-md-8 bg-body-tertiary p-5">
-      <h4 class="mb-3">Платежная информация</h4>
+    <div class="col-md-8 bg-body-tertiary p-5 rounded-4">
+      <h4 class="mb-4" style="font-family: 'Nunito', sans-serif; color: #6e473b;">Платежная информация</h4>
       <form method="post" action="{% url 'checkout' %}">
         {% csrf_token %}
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label for="first_name" class="form-label">Имя</label>
-            <input type="text" class="form-control" name="first_name" required>
+            <label for="first_name" class="form-label fw-medium">Имя</label>
+            <input type="text" class="form-control py-2" name="first_name" id="first_name" required>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="last_name" class="form-label">Фамилия</label>
-            <input type="text" class="form-control" name="last_name" required>
+            <label for="last_name" class="form-label fw-medium">Фамилия</label>
+            <input type="text" class="form-control py-2" name="last_name" id="last_name" required>
           </div>
         </div>
+
         <div class="mb-3">
-          <label for="email" class="form-label">Почта</label>
-          <input type="email" class="form-control" name="email" required>
+          <label for="email" class="form-label fw-medium">Почта</label>
+          <input type="email" class="form-control py-2" name="email" id="email" required>
         </div>
-        <div class="mb-3">
-          <label for="address" class="form-label">Адрес</label>
-          <input type="text" class="form-control" name="address" required>
+
+        <!-- Адрес -->
+        <div class="mb-3" id="address_field">
+          <label for="address" class="form-label fw-medium">Адрес доставки</label>
+          <input type="text" class="form-control py-2" name="address" id="address">
         </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="city" class="form-label">Город</label>
-            <input type="text" class="form-control" name="city" required>
-          </div>
-          <div class="col-md-3 mb-3">
-            <label for="state" class="form-label">Государство</label>
-            <input type="text" class="form-control" name="state" required>
-          </div>
-          <div class="col-md-3 mb-3">
-            <label for="zip" class="form-label">Почтовый индекс</label>
-            <input type="text" class="form-control" name="zip" required>
+
+        <!-- Способ оплаты -->
+        <div class="mb-4">
+          <h5 class="mb-3 fw-medium" style="color: #6e473b;">Способ оплаты</h5>
+
+          <div class="payment-methods">
+            <div class="payment-option">
+              <input class="form-check-input" type="radio" name="payment_method" id="cash" value="cash" checked>
+              <label class="payment-label" for="cash">
+                <div class="payment-icon">
+                  <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="payment-info">
+                  <span class="payment-title">Наличные при выдаче</span>
+                  <span class="payment-desc">Оплата курьеру при получении заказа</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="payment-option">
+              <input class="form-check-input" type="radio" name="payment_method" id="card" value="card">
+              <label class="payment-label" for="card">
+                <div class="payment-icon">
+                  <i class="far fa-credit-card"></i>
+                </div>
+                <div class="payment-info">
+                  <span class="payment-title">Банковская карта</span>
+                  <span class="payment-desc">Оплата картой онлайн</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="payment-option">
+              <input class="form-check-input" type="radio" name="payment_method" id="sbp" value="sbp">
+              <label class="payment-label" for="sbp">
+                <div class="payment-icon">
+                  <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div class="payment-info">
+                  <span class="payment-title">СБП</span>
+                  <span class="payment-desc">Оплата по QR-коду через мобильный банк</span>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
-        <button type="submit" class="btn btn-dark mt-3">Оформить заказ</button>
+
+        <button type="submit" class="btn btn-dark mt-3 py-2 px-4 rounded-pill fw-medium"
+                style="background-color: #8e7054; border: none;">
+          Оформить заказ
+        </button>
       </form>
     </div>
 
-    <!-- Краткое описание заказа -->
-    <div class="col-md-4 p-3">
-      <h4 class="mb-3 mt-4">Ваш заказ</h4>
-      <ul class="list-group mb-3">
-        {% for item in cart_items %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          {{ item.product_name }} (x{{ item.quantity }})
-          <span>₽{{ item.total_price }}</span>
-        </li>
-        {% endfor %}
-      </ul>
-      <h5 class="text-end">Итого: ₽{{ cart_total }}</h5>
+    <!-- Корзина -->
+    <div class="col-md-4 p-4">
+      <div class="bg-white p-4 rounded-4 shadow-sm">
+        <h4 class="mb-4" style="font-family: 'Nunito', sans-serif; color: #6e473b;">Ваш заказ</h4>
+        <ul class="list-group mb-3">
+          {% for item in cart_items %}
+          <li class="list-group-item d-flex justify-content-between align-items-center border-0 py-3 px-0">
+            <span class="text-muted">{{ item.product_name }} (x{{ item.quantity }})</span>
+            <span class="fw-medium">₽{{ item.total_price }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+        <div class="d-flex justify-content-between align-items-center py-3 border-top">
+          <h5 class="mb-0 fw-medium">Итого:</h5>
+          <h5 class="mb-0 fw-bold" style="color: #8e7054;">₽{{ cart_total }}</h5>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<style>
+  .payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .payment-option {
+    position: relative;
+  }
+
+  .payment-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .payment-label {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .payment-option input[type="radio"]:checked + .payment-label {
+    border-color: #8e7054;
+    background-color: rgba(142, 112, 84, 0.05);
+  }
+
+  .payment-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-right: 16px;
+    color: #8e7054;
+    font-size: 18px;
+  }
+
+  .payment-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .payment-title {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .payment-desc {
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
+
+  .form-control {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  }
+
+  .form-control:focus {
+    border-color: #8e7054;
+    box-shadow: 0 0 0 0.25rem rgba(142, 112, 84, 0.25);
+  }
+</style>
+
 {% endblock %}

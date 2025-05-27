@@ -1,11 +1,13 @@
 from .forms import ContactForm
+from django.contrib.admin.views.decorators import staff_member_required
 from django.core.paginator import Paginator
 from .models import Category, Product, Order, OrderItem
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from .models import ContactMessage
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
-from django.contrib.auth.forms import UserCreationForm
+from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -133,9 +135,17 @@ def register_view(request):
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
 
-@login_required(login_url='login')
+@login_required
 def profile_view(request):
-    return render(request, 'profile.html')
+    categories = Category.objects.all()
+    all_cart = get_cart(request)
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'profile.html', {
+        'user': request.user,
+        'all_cart': all_cart,
+        'categories': categories,
+        'orders': orders,  # Передача заказов в шаблон
+    })
 
 def logout_view(request):
     logout(request)
@@ -160,13 +170,13 @@ def checkout(request):
 
     if request.method == 'POST':
         order = Order.objects.create(
+            user=request.user,
             first_name=request.POST['first_name'],
             last_name=request.POST['last_name'],
             email=request.POST['email'],
-            address=request.POST['address'],
-            city=request.POST['city'],
-            state=request.POST['state'],
-            zip_code=request.POST['zip']
+            address=request.POST.get('address', ''),
+            payment_method=request.POST.get('payment_method', 'cash'),
+            status='packing'
         )
 
         for item in cart_items:
@@ -186,18 +196,30 @@ def checkout(request):
         'cart_total': cart_total
     })
 
+
 def contact(request):
-    form = ContactForm()
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            # Здесь можно отправить email, сохранить в БД и т.д.
-            # name = form.cleaned_data['name']
-            # email = form.cleaned_data['email']
-            # phone = form.cleaned_data['phone']
-            # message = form.cleaned_data['message']
-            pass
+            # Сохраняем сообщение в базу данных
+            ContactMessage.objects.create(
+                name=form.cleaned_data['name'],
+                email=form.cleaned_data['email'],
+                phone=form.cleaned_data['phone'],
+                message=form.cleaned_data['message']
+            )
+
+            messages.success(request, 'Ваше сообщение отправлено! Мы свяжемся с вами в ближайшее время.')
+            return redirect('contact')
+    else:
+        form = ContactForm()
+
     return render(request, 'contact.html', {'form': form})
+
+@staff_member_required
+def view_contact_messages(request):
+    messages = ContactMessage.objects.all().order_by('-created_at')
+    return render(request, 'admin/admin_messages.html', {'messages': messages})
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)

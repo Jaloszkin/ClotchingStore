@@ -1,0 +1,21 @@
+/* Основные цвета */
+:root {
+    --primary: #8e7054;
+    --primary-dark: #6d563f;
+    --primary-light: #a88a6e;
+}
+
+/* Jazzmin */
+.sidebar-header, .navbar-brand-box {
+    background: var(--primary) !important;
+}
+
+/* Admin Interface */
+#header, .module h2 {
+    background: var(--primary) !important;
+}
+
+/* Стандартная админка */
+#header {
+    background: var(--primary) !important;
+}

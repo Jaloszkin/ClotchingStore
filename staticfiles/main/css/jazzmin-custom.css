@@ -1,0 +1,33 @@
+:root {
+    /* Основные цвета */
+    --primary: #8e7054;      /* Основной цвет (кнопки, хедер) */
+    --secondary: #6d563f;    /* Темный вариант для ховеров */
+    --light: #f5f1ed;        /* Светлый фон */
+    --dark: #2c2c2c;         /* Текст */
+}
+
+/* Хедер и логотип */
+.jazzmin .main-header {
+    background-color: var(--primary) !important;
+    border-bottom: 1px solid var(--secondary);
+}
+
+/* Боковое меню */
+.jazzmin .sidebar {
+    background-color: var(--light) !important;
+}
+
+/* Кнопки */
+.jazzmin .btn-primary {
+    background-color: var(--primary) !important;
+    border-color: var(--secondary) !important;
+}
+
+.jazzmin .btn-primary:hover {
+    background-color: var(--secondary) !important;
+}
+
+/* Активные элементы меню */
+.jazzmin .sidebar .nav-treeview .nav-item .nav-link.active {
+    background-color: var(--primary) !important;
+}

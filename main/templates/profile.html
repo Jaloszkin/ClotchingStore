@@ -38,6 +38,81 @@
           </div>
         </div>
       </div>
+
+      <div class="mt-5">
+        <h3 style="font-family: 'Kavoon', cursive; color: #8e7054;" class="text-center mb-4">Мои заказы</h3>
+
+        {% if orders %}
+          <div class="list-group">
+            {% for order in orders %}
+              <div class="list-group-item mb-3 p-4" style="border-radius: 0.5rem; border: 1px solid #e0e0e0; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+                  <div>
+                      <h5 class="mb-2" style="color: #8e7054; font-family: 'Nunito', sans-serif; font-weight: bold;">
+                          Заказ #{{ order.id }}
+                      </h5>
+                      <div class="text-muted small mb-1">
+                          <i class="far fa-calendar-alt me-1"></i> {{ order.created_at|date:"d.m.Y H:i" }}
+                      </div>
+                      <div>
+                          <span class="badge
+                              {% if order.status == 'packing' %}bg-warning text-dark
+                              {% elif order.status == 'shipped' %}bg-info text-white
+                              {% elif order.status == 'delivered' %}bg-success text-white
+                              {% endif %}"
+                              style="font-family: 'Nunito', sans-serif;">
+                              {{ order.get_status_display }}
+                          </span>
+                      </div>
+                      <div>
+                          <i class="fas fa-map-marker-alt me-1" style="color: #8e7054;"></i>
+                          <h6 class="mb-2" style="font-family: 'Nunito', sans-serif; color: #6e473b;">Адрес доставки:</h6>
+                          {% if order.address %}
+                              {{ order.address }}
+                          {% else %}
+                              Адрес не указан
+                          {% endif %}
+                      </div>
+                  </div>
+                  <div class="text-end">
+                      <span class="fw-bold fs-5" style="color: #8e7054;">
+                          {{ order.get_total_price }} ₽
+                      </span>
+                  </div>
+              </div>
+
+                <div class="order-products mt-3">
+                  <h6 class="mb-2" style="font-family: 'Nunito', sans-serif; color: #6e473b;">Товары:</h6>
+                  <div class="d-flex flex-wrap align-items-center" style="gap: 15px;">
+                    {% for item in order.items.all %}
+                      <div class="product-item d-flex align-items-center" style="background: #f9f9f9; padding: 8px; border-radius: 8px;">
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
+                             style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd; margin-right: 10px;">
+                        <div>
+                          <div class="fw-bold">{{ item.product.name }}</div>
+                          <div class="small text-muted">
+                            {{ item.quantity }} × {{ item.price }} ₽
+                          </div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="text-center p-4 bg-light rounded" style="border: 1px dashed #ddd;">
+            <i class="far fa-folder-open fa-3x mb-3" style="color: #8e7054;"></i>
+            <h5 style="font-family: 'Nunito', sans-serif; color: #6e473b;">Заказов пока нет</h5>
+            <a href="{% url 'catalog' %}" class="btn mt-2" style="background-color: #8e7054; color: white;">
+              Перейти в каталог
+            </a>
+          </div>
+        {% endif %}
+      </div>
+
+
     </div>
   </div>
 </div>
@@ -47,9 +122,37 @@
     background-color: #6e473b !important;
     color: white !important;
     border-color: #6e473b !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  .list-group-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+  .product-item:hover {
+    background: #f0f0f0 !important;
   }
   p strong {
     color: #8e7054;
   }
+  <style>
+    .badge {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    .bg-warning {
+        background-color: #fff3cd !important;
+    }
+    .bg-info {
+        background-color: #0dcaf0 !important;
+    }
+    .bg-success {
+        background-color: #198754 !important;
+    }
+</style>
+
 </style>
 {% endblock %}

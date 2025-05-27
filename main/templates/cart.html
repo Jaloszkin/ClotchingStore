@@ -5,8 +5,6 @@
 {% block content %}
 {% load static %}
 <!-- CART -->
-{% load static %}
-
 <div class="container mt-5 mb-5">
   <h1 class="mb-4">Ваша корзина</h1>
   <div id="cartContainer" class="table-responsive">
@@ -25,7 +23,7 @@
           {% for item in cart_items %}
           <tr class="text-center align-middle">
             <td>{{ item.product_name }}</td>
-            <td>${{ item.price }}</td>
+            <td>₽{{ item.price }}</td>
             <td>
               <div class="d-flex justify-content-center align-items-center">
                 <!-- Кнопка уменьшения -->
@@ -45,14 +43,13 @@
                 </form>
               </div>
             </td>
-            <td>${{ item.total_price }}</td>
+            <td>₽{{ item.total_price }}</td>
             <td>
               <!-- Кнопка удаления товара из корзины -->
               <form method="post" action="{% url 'cart_remove_item' item.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
               </form>
-
             </td>
           </tr>
           {% endfor %}

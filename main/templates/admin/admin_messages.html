@@ -1,0 +1,35 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>Сообщения от пользователей</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Имя</th>
+            <th>Email</th>
+            <th>Телефон</th>
+            <th>Сообщение</th>
+            <th>Статус</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for msg in messages %}
+        <tr>
+            <td>{{ msg.created_at|date:"d.m.Y H:i" }}</td>
+            <td>{{ msg.name }}</td>
+            <td>{{ msg.email }}</td>
+            <td>{{ msg.phone|default:"-" }}</td>
+            <td>{{ msg.message|truncatechars:50 }}</td>
+            <td>
+                {% if msg.is_processed %}
+                <span class="badge bg-success">Обработано</span>
+                {% else %}
+                <span class="badge bg-warning">Новое</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,69 +1,122 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Контакты | Clothing Store{% endblock %}
 
 {% block content %}
+<!-- CONTACT SECTION -->
+<div class="container py-5">
+  <div class="row g-5 align-items-center">
+    <!-- Форма -->
+    <div class="col-lg-6">
+      <div class="contact-form bg-white p-4 p-md-5 shadow-sm rounded-3">
+        <h1 class="display-5 mb-4" style="font-family: 'Nunito', sans-serif; font-weight: 700; color: #6e473b;">Свяжитесь с нами</h1>
+        <p class="text-muted mb-4" style="font-family: 'Nunito', sans-serif;">Как мы можем вам помочь?</p>
 
-{% load static %}
-<!-- CONTACT -->
-<div class="container contactct">
-  <div class="row rowcn">
-    <div class="col form-container cnform">
-      <h1>Связь с нами</h1>
-      <p>Как мы можем помочь?</p>
-      <form method="post">
-        {% csrf_token %}
-        <div class="d-flex">
-          <div class="mb-3 namegg">
-            <label for="name" class="form-label">Имя</label>
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              name="name"
-              placeholder="Имя"
-            />
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <form method="post" class="needs-validation" novalidate>
+          {% csrf_token %}
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="name" class="form-label" style="font-family: 'Nunito', sans-serif; font-weight: 600;">Имя</label>
+              <input type="text" class="form-control rounded-pill" id="name" name="name" placeholder="Ваше имя" required style="padding: 12px 20px; border: 1px solid #dad2cb;">
+              <div class="invalid-feedback">
+                Пожалуйста, введите ваше имя.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="email" class="form-label" style="font-family: 'Nunito', sans-serif; font-weight: 600;">Email</label>
+              <input type="email" class="form-control rounded-pill" id="email" name="email" placeholder="example@mail.com" required style="padding: 12px 20px; border: 1px solid #dad2cb;">
+              <div class="invalid-feedback">
+                Пожалуйста, введите корректный email.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="phone" class="form-label" style="font-family: 'Nunito', sans-serif; font-weight: 600;">Телефон</label>
+              <input type="tel" class="form-control rounded-pill" id="phone" name="phone" placeholder="+7 999 999 99 99" style="padding: 12px 20px; border: 1px solid #dad2cb;">
+            </div>
+
+            <div class="col-12">
+              <label for="message" class="form-label" style="font-family: 'Nunito', sans-serif; font-weight: 600;">Сообщение</label>
+              <textarea class="form-control" id="message" name="message" rows="4" placeholder="Ваше сообщение..." required style="border: 1px solid #dad2cb; border-radius: 15px;"></textarea>
+              <div class="invalid-feedback">
+                Пожалуйста, напишите ваше сообщение.
+              </div>
+            </div>
+
+            <div class="col-12 mt-4">
+              <button class="btn w-100 py-3 rounded-pill" type="submit" style="background-color: #8e7054; color: white; font-family: 'Nunito', sans-serif; font-weight: 600; transition: all 0.3s;">
+                Отправить сообщение
+                <i class="fas fa-paper-plane ms-2"></i>
+              </button>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="email" class="form-label">Почта</label>
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              name="email"
-              placeholder="Почта"
-            />
-          </div>
-        </div>
-        <div class="mb-3">
-          <label for="phone" class="form-label">Номер телефона</label>
-          <input
-            type="text"
-            class="form-control"
-            id="phone"
-            name="phone"
-            placeholder="+7 999 999 99 99"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="message" class="form-label">Ваше обращение</label>
-          <textarea
-            class="form-control"
-            id="message"
-            name="message"
-            rows="3"
-            placeholder="Сообщение"
-          ></textarea>
-        </div>
-        <button type="submit" class="btn btn-dark">Отправить</button>
-      </form>
+        </form>
+      </div>
     </div>
-    <div class="col image-container image-containercn">
-      <img src="{% static 'main/img/Contact.jpg' %}" alt="Contact Image" />
+
+    <!-- Изображение -->
+    <div class="col-lg-6 d-none d-lg-block">
+      <div class="position-relative">
+        <img src="{% static 'main/img/Contact.jpg' %}" alt="Contact Image" class="img-fluid rounded-3 shadow" style="border: 8px solid white;">
+        <div class="position-absolute top-0 start-0 w-100 h-100 rounded-3" style="background: rgba(142, 112, 84, 0.1); z-index: 1;"></div>
+      </div>
     </div>
   </div>
 </div>
-<!-- CONTACT -->
 
+<style>
+  #name, #email {
+    width: 100%; /* или 100% для заполнения родительского контейнера */
+  }
 
+  .contact-form {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .contact-form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .form-control:focus {
+    border-color: #8e7054 !important;
+    box-shadow: 0 0 0 0.25rem rgba(142, 112, 84, 0.25) !important;
+  }
+</style>
+
+<script>
+// Валидация формы
+(function() {
+  'use strict';
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  var forms = document.querySelectorAll('.needs-validation');
+
+  // Loop over them and prevent submission
+  Array.prototype.slice.call(forms)
+    .forEach(function(form) {
+      form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+        form.classList.add('was-validated');
+      }, false);
+    });
+})();
+</script>
+<!-- END CONTACT SECTION -->
 {% endblock %}
